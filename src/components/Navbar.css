@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap');
+
+.navbar-brand.gran-hotel {
+    font-family: 'Gran Hotel', cursive !important;
+}
+
+.link{
+    text-decoration: none;
+}
+
+.link:hover{
+    cursor: pointer;
+}
+
+.small-img {
+    display: flex;
+    margin: auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.navbar-collapse {
+    overflow-y: hidden !important;
+}
+
+.colorToggle{
+    color: white !important;
+}
+
