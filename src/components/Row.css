@@ -52,6 +52,7 @@
     right: 10px; /* Ajusta la posición del ícono horizontalmente */
     cursor: pointer;
     z-index: 1;
+    font-size: 20px;
     opacity: 0; /* Inicialmente oculto */
     transition: opacity 0.3s ease; /* Transición suave para la opacidad */
 }
