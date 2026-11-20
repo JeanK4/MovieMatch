@@ -1,8 +1,268 @@
-body {
-    height: 100vh;
-    background: linear-gradient(#4E165D,#010002);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+:root {
+    /* Paleta Movie Match: morado de marca + dorado de sala de cine */
+    --plum: #4E165D;
+    --void: #07030a;
+    --ink: #120618;
+    --violet: #7c2ae8;
+    --orchid: #b15cff;
+    --orchid-soft: #d3a6ff;
+    --gold: #ffc24b;
+    --mist: #EAEAEA;
+
+    --surface: rgba(22, 8, 30, 0.72);
+    --surface-raised: rgba(44, 14, 58, 0.85);
+    --line: rgba(234, 222, 245, 0.1);
+    --line-strong: rgba(234, 222, 245, 0.22);
+    --text: #ffffff;
+    --text-2: #dacfe6;
+    --text-3: #a897bb;
+    --danger: #ff7896;
+
+    --font-brand: 'Grand Hotel', cursive;
+    --font-label: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+    --font-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --radius: 12px;
+    --radius-lg: 20px;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --shell-w: 1280px;
+
+    color-scheme: dark;
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    background: var(--void);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(900px 500px at 85% -10%, rgba(124, 42, 232, 0.35), transparent 70%),
+        radial-gradient(700px 420px at 0% 0%, rgba(78, 22, 93, 0.9), transparent 70%),
+        linear-gradient(180deg, #24092f 0px, var(--ink) 600px, var(--void) 1200px);
+    background-repeat: no-repeat;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p {
+    margin: 0;
+}
+
+h1, h2, h3 {
+    line-height: 1.15;
+    text-wrap: balance;
+}
+
+a {
+    color: inherit;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+button,
+input {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+::selection {
+    background: var(--orchid);
+    color: #fff;
+}
+
+:focus-visible {
+    outline: 2px solid var(--orchid-soft);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(161, 30, 248, 0.45) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(161, 30, 248, 0.4);
+    border-radius: 10px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Utilidades compartidas */
+.shell {
+    width: 100%;
+    max-width: var(--shell-w);
+    margin: 0 auto;
+    padding-inline: clamp(16px, 4vw, 40px);
+}
+
+.label {
+    font-family: var(--font-label);
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+}
+
+.btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 0 22px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    font-size: 0.98rem;
+    white-space: nowrap;
+    text-decoration: none;
+    transition:
+        transform 350ms var(--ease-spring),
+        box-shadow 300ms var(--ease-out),
+        background-color 200ms,
+        border-color 200ms,
+        color 200ms,
+        opacity 200ms;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn svg {
+    flex-shrink: 0;
+    transition: transform 350ms var(--ease-spring);
+}
+
+.btn:active:not(:disabled) {
+    transform: scale(0.95);
+    transition-duration: 100ms;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--violet) 0%, #5b16b8 100%);
+    border-color: rgba(211, 166, 255, 0.35);
+    color: #fff;
+    box-shadow: 0 8px 24px -10px rgba(124, 42, 232, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Destello que cruza el botón principal al pasar el cursor */
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+    transform: translateX(-120%);
+}
+
+.btn-ghost {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--line-strong);
+    color: var(--text);
+}
+
+.btn-gold {
+    background: var(--gold);
+    color: #2a1200;
+    box-shadow: 0 8px 24px -10px rgba(255, 194, 75, 0.8);
+}
+
+@media (hover: hover) {
+    .btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        box-shadow: 0 14px 32px -10px rgba(124, 42, 232, 1), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-primary:hover:not(:disabled)::after {
+        transform: translateX(120%);
+        transition: transform 700ms var(--ease-out);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+        border-color: var(--orchid-soft);
+        background: rgba(177, 92, 255, 0.12);
+        box-shadow: 0 10px 26px -14px rgba(177, 92, 255, 0.9);
+    }
+
+    .btn-gold:hover:not(:disabled) {
+        box-shadow: 0 14px 30px -10px rgba(255, 194, 75, 0.9);
+    }
+
+    /* Cada icono reacciona a su manera */
+    .btn:hover:not(:disabled) .i-nudge { transform: translateX(4px); }
+    .btn:hover:not(:disabled) .i-back { transform: translateX(-4px); }
+    .btn:hover:not(:disabled) .i-spin { transform: rotate(180deg); }
+    .btn:hover:not(:disabled) .i-rewind { transform: rotate(-200deg); }
+    .btn:hover:not(:disabled) .i-pop { transform: scale(1.25); }
+}
+
+/* Latido al marcar una favorita */
+.is-fav-pop svg {
+    animation: heart-pop 500ms var(--ease-spring);
+}
+
+@keyframes heart-pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.45); }
+    100% { transform: scale(1); }
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
+}
