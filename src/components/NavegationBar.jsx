@@ -1,39 +1,114 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Menu, X, LogOut, Clapperboard, Sparkles } from 'lucide-react';
+import { logout } from '../storage/reducers/actions';
+import Logo from './Logo';
 import './Navbar.css'
 
+const LINKS = [
+    { to: '/Catalogo', label: 'Catálogo', icon: Clapperboard },
+    { to: '/Recomendaciones', label: 'Generar recomendaciones', icon: Sparkles },
+];
+
 function NavegationBar() {
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [open, setOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [indicator, setIndicator] = useState(null);
+    const listRef = useRef(null);
+
+    useEffect(() => {
+        setOpen(false);
+    }, [location.pathname]);
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 8);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    // Mide el enlace activo para deslizar la píldora indicadora hasta él.
+    useLayoutEffect(() => {
+        const measure = () => {
+            const active = listRef.current?.querySelector('.nav-link.active');
+            const li = active?.parentElement;
+            setIndicator(li ? { x: li.offsetLeft, w: li.offsetWidth } : null);
+        };
+        measure();
+        window.addEventListener('resize', measure);
+        document.fonts?.ready.then(measure);
+        return () => window.removeEventListener('resize', measure);
+    }, [location.pathname, user]);
+
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/');
+    };
+
+    // En la pantalla de acceso la presentación ya lleva el logo: sin barra.
+    if (!user && location.pathname === '/') return null;
+
+    const initial = user?.name?.trim()?.[0]?.toUpperCase() ?? '?';
+
     return (
-        <Navbar expand="lg" className="bg-body-tertiary fs-4 fixed">
-            <Container fluid>
-                <Navbar.Brand href="/" className="text-white fs-2">m&m</Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbarScroll outline-light" className='colorToggle'/>
-                <Navbar.Collapse id="navbarScroll" variant="outline-light" className='navbar-collapse'>
-                    <Nav
-                        className="me-auto my-2 my-lg-0"
-                        style={{ maxHeight: '300px' }}
-                    >
-                        <Nav.Link href="/" className="text-white">Inicio</Nav.Link>
-                        <Nav.Link href="Recomendaciones" className="text-white">Generar Recomendaciones</Nav.Link>
-                        <Nav.Link href="Catalogo" className="text-white">Catálogo</Nav.Link>
-                        <Nav.Link href="Prueba" className="text-white">Prueba</Nav.Link>
-                    </Nav>
-                    <Form className="d-flex">
-                        <Form.Control
-                            type="search"
-                            placeholder="Search"
-                            className="me-2"
-                            aria-label="Search"
-                        />
-                        <Button variant="outline-light">Search</Button>
-                    </Form>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+        <header className={`nav ${open ? 'is-open' : ''} ${scrolled ? 'is-scrolled' : ''}`}>
+            <div className="shell nav-inner">
+                <Link to={user ? '/Catalogo' : '/'} className="nav-brand" aria-label="Movie Match, inicio"><Logo size={42} title="Movie Match" /></Link>
+
+                {user && (
+                    <>
+                        <button
+                            type="button"
+                            className="nav-toggle"
+                            aria-expanded={open}
+                            aria-controls="nav-panel"
+                            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+                            onClick={() => setOpen((v) => !v)}
+                        >
+                            <span className="nav-toggle-icon" key={open ? 'x' : 'm'}>
+                                {open ? <X size={22} /> : <Menu size={22} />}
+                            </span>
+                        </button>
+
+                        <div className="nav-panel" id="nav-panel">
+                            <nav aria-label="Principal">
+                                <ul className="nav-links" ref={listRef}>
+                                    {indicator && (
+                                        <li
+                                            className="nav-indicator"
+                                            aria-hidden="true"
+                                            style={{ transform: `translateX(${indicator.x}px)`, width: indicator.w }}
+                                        />
+                                    )}
+                                    {LINKS.map(({ to, label, icon: Icon }, i) => (
+                                        <li key={to} style={{ '--i': i }}>
+                                            <NavLink to={to} className="nav-link">
+                                                <Icon size={17} aria-hidden="true" />
+                                                {label}
+                                            </NavLink>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </nav>
+
+                            <div className="nav-user">
+                                <span className="nav-avatar" aria-hidden="true">{initial}</span>
+                                <span className="nav-user-name">{user.name}</span>
+                                <button type="button" className="nav-logout" onClick={handleLogout}>
+                                    <LogOut size={17} aria-hidden="true" />
+                                    <span>Salir</span>
+                                </button>
+                            </div>
+                        </div>
+                    </>
+                )}
+            </div>
+        </header>
     );
 }
 

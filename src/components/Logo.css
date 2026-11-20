@@ -1,0 +1,49 @@
+.logo {
+    display: block;
+    overflow: visible;
+    filter: drop-shadow(0 6px 14px rgba(124, 42, 232, 0.55));
+}
+
+.logo-reel {
+    transform-origin: 22px 22px;
+    transform-box: view-box;
+    transition: transform 900ms var(--ease-out);
+}
+
+.logo-heart {
+    transform-origin: 22px 23px;
+    transform-box: view-box;
+    animation: heartbeat 2.8s ease-in-out infinite;
+}
+
+.logo-tape,
+.logo-tape-holes {
+    transition: transform 600ms var(--ease-out);
+}
+
+/* El corazón late de vez en cuando */
+@keyframes heartbeat {
+    0%, 70%, 100% { transform: scale(1); }
+    76% { transform: scale(1.22); }
+    82% { transform: scale(1); }
+    88% { transform: scale(1.14); }
+}
+
+/* Al pasar el cursor el carrete gira y la cinta avanza */
+a:hover > .logo .logo-reel,
+.logo:hover .logo-reel {
+    transform: rotate(240deg);
+}
+
+a:hover > .logo .logo-tape,
+a:hover > .logo .logo-tape-holes,
+.logo:hover .logo-tape,
+.logo:hover .logo-tape-holes {
+    transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logo-heart {
+        animation: none;
+    }
+}

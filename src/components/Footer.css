@@ -1,0 +1,50 @@
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-main {
+    flex: 1;
+}
+
+.footer {
+    margin-top: 72px;
+    border-top: 1px solid var(--line);
+    padding: 28px 0 36px;
+    color: var(--text-3);
+    font-size: 0.86rem;
+}
+
+.footer-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.footer-logo {
+    flex-shrink: 0;
+    filter: none;
+    opacity: 0.85;
+}
+
+/* En la pantalla de acceso todo cabe en una sola vista */
+.app.is-auth {
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.app.is-auth .footer {
+    margin-top: 0;
+    padding: 14px 0 16px;
+    font-size: 0.8rem;
+}
+
+.footer a {
+    color: var(--text-2);
+    text-underline-offset: 3px;
+}
+
+.footer a:hover {
+    color: var(--orchid-soft);
+}
